@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Bell, Heart, User, Home, MessageSquare, PlusCircle, Bookmark } from 'lucide-react';
-import MobileBottomNav from '@/app/components/dropshipper/BottomNavigation';
+import MobileBottomNav from '@/app/dropshipper/components/BottomNavigation';
 import { useRouter } from 'next/navigation';
 
 interface Plan {
