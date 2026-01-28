@@ -1,4 +1,3 @@
-// components/PaymentPopup.tsx
 'use client';
 import React, { useState, useEffect } from 'react';
 
@@ -14,10 +13,41 @@ interface OrderDetails {
   total: number;
 }
 
+// Add these type definitions
+interface MockOrder {
+  _id: string;
+  productId: string;
+  vendorId: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
+  deliveryAddress: string;
+  paymentMethod: string;
+  status: string;
+  createdAt: string;
+  orderNumber: string;
+}
+
+interface OrderResult {
+  type: 'order';
+  data: {
+    order: MockOrder;
+  };
+}
+
+interface RedirectResult {
+  type: 'redirect';
+  data: {
+    paymentUrl: string;
+  };
+}
+
+type MockResult = OrderResult | RedirectResult;
+
 interface PaymentPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  onOrderCreated?: (order: any) => void;
+  onOrderCreated?: (order: MockOrder) => void;
   onPaymentRedirect?: (paymentUrl: string) => void;
   orderDetails: OrderDetails;
 }
@@ -66,12 +96,12 @@ export default function PaymentPopup({
     unitPrice: number,
     formattedAddress: string,
     paymentMethod: string
-  ) => {
+  ): Promise<OrderResult> => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Mock order data
-    const mockOrder = {
+    const mockOrder: MockOrder = {
       _id: 'order_' + Date.now(),
       productId,
       vendorId,
@@ -89,7 +119,7 @@ export default function PaymentPopup({
   };
 
   // Simulate payment redirect
-  const createMockPaymentRedirect = async () => {
+  const createMockPaymentRedirect = async (): Promise<RedirectResult> => {
     // Simulate API delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
@@ -114,7 +144,7 @@ export default function PaymentPopup({
       // Format delivery address
       const formattedAddress = `${deliveryAddress.name}, ${deliveryAddress.phone}, ${deliveryAddress.address}`;
       
-      let result;
+      let result: MockResult;
       
       if (paymentMethod === 'balance') {
         // Check if user has sufficient balance
@@ -355,7 +385,7 @@ export default function PaymentPopup({
                     className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
-                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA1NiA1NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIGZpbGw9IiNFNUU1RTUiLz48Y2lyY2xlIGN4PSIyOCIgY3k9IjI4IiByPSIxMCIgZmlsbD0iI0NDQ0NDQyIvPjwvc3ZnPg==';
+                      target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHZpZXdCb3g9IjAgMCA1NiA1NiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIGZpbGw9IiNGRkZGRkYiLz48cmVjdCB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIGZpbGw9IiVFNUU1RTUiLz48Y2lyY2xlIGN4PSIyOCIgY3k9IjI4IiByPSIxMCIgZmlsbD0iI0NDQ0NDQyIvPjwvc3ZnPg==';
                     }}
                   />
                 ) : (
