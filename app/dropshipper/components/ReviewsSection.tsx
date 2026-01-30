@@ -29,7 +29,7 @@ interface ReviewsSectionComponentProps {
   loading?: boolean;
 }
 
-// Mock reviews data
+// Mock reviews data - all data is now static
 const mockReviews: Review[] = [
   {
     _id: 'review_1',
@@ -88,57 +88,14 @@ const mockReviews: Review[] = [
   }
 ];
 
-// Local hook for mock reviews data
-const useMockReviewsData = (productId?: string) => {
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchReviews = () => {
-      if (!productId) {
-        setReviews(mockReviews);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-        setError(null);
-        
-        console.log('🔄 Fetching reviews for product:', productId);
-        
-        setTimeout(() => {
-          setReviews(mockReviews);
-          setLoading(false);
-        }, 500);
-        
-      } catch (err: any) {
-        console.error('❌ Error fetching reviews:', err);
-        setError('Failed to fetch reviews (mock error)');
-        setLoading(false);
-      }
-    };
-
-    fetchReviews();
-  }, [productId]);
-
-  return { reviews, loading, error };
-};
-
 const ReviewsSectionComponent: React.FC<ReviewsSectionComponentProps> = ({ 
   productId, 
   vendor,
   loading = false 
 }) => {
   const router = useRouter();
+  const [reviews] = useState<Review[]>(mockReviews); // Directly use mock data
   
-  const { 
-    reviews, 
-    loading: reviewsLoading, 
-    error 
-  } = useMockReviewsData(productId || '');
-
   const getVendorInitials = (vendorName?: string): string => {
     if (!vendorName || typeof vendorName !== 'string') return 'VD';
     const initials = vendorName
@@ -190,9 +147,9 @@ const ReviewsSectionComponent: React.FC<ReviewsSectionComponentProps> = ({
     return Array.from({ length: maxRating }, (_, index) => (
       <Star
         key={index}
-        className={`w-3.5 h-3.5 ${
+        className={`w-2.5 h-2.5 ${
           index < safeRating
-            ? 'fill-orange-400 text-orange-400'
+            ? 'fill-black text-black'
             : 'text-gray-300'
         }`}
       />
@@ -226,7 +183,7 @@ const ReviewsSectionComponent: React.FC<ReviewsSectionComponentProps> = ({
   };
 
   // Loading skeleton
-  if (loading || reviewsLoading) {
+  if (loading) {
     return (
       <div className="w-[90%] mx-auto bg-white rounded-lg p-6">
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
@@ -276,36 +233,20 @@ const ReviewsSectionComponent: React.FC<ReviewsSectionComponentProps> = ({
     );
   }
 
-  // Error state
-  if (error) {
-    return (
-      <div className="w-[90%] mx-auto bg-white rounded-lg p-6">
-        <div className="text-center py-8">
-          <div className="text-red-600 text-lg mb-2">Error loading reviews</div>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="w-[90%] mx-auto bg-white rounded-lg p-6">
+    <div className="w-[100%] mx-auto bg-gray-50 rounded-lg p-4">
+      <div className="p-4 bg-white rounded-lg">
+      <div className=''>
       {/* Vendor Header Section */}
-      <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+      <div className="flex items-center justify-between pb-2 border-b border-gray-200">
         {/* Vendor Info */}
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 bg-[#4A5FBA] rounded-full flex items-center justify-center">
-            <span className="text-white font-semibold text-base">
+          <div className="w-8 h-8 bg-[#4A5FBA] rounded-full flex items-center justify-center">
+            <span className="text-white font-semibold text-[12px]">
               {userProfile.initials}
             </span>
           </div>
-          <span className="font-semibold text-gray-900 text-base">{userProfile.name}</span>
+          <span className="font-semibold text-gray-900 text-[15px]">{userProfile.name}</span>
         </div>
 
         {/* Visit Profile Button with Arrow */}
@@ -317,78 +258,109 @@ const ReviewsSectionComponent: React.FC<ReviewsSectionComponentProps> = ({
           <ChevronRight className="w-5 h-5" />
         </button>
       </div>
-
-      {/* Reviews Summary */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-4">
-          <span className="text-gray-900 font-medium text-base">
-            Reviews({userProfile.totalReviews})
-          </span>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5">
-              {renderStars(Math.floor(userProfile.averageRating))}
-            </div>
-            <span className="text-sm font-normal text-gray-700">
-              {userProfile.averageRating.toFixed(1)}
-            </span>
-          </div>
-        </div>
-
-        {/* View All Button */}
-        {reviews.length > 3 && (
-          <button
-            onClick={handleViewAll}
-            className="flex items-center gap-1 text-gray-900 text-sm font-medium hover:text-gray-700 transition-colors"
-          >
-            View all
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        )}
       </div>
 
-      {/* Reviews Grid */}
-      {reviews.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {reviews.slice(0, 3).map((review: Review) => (
-            <div
-              key={review._id}
-              className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow duration-200"
-            >
-              {/* Stars */}
-              <div className="flex items-center gap-0.5 mb-2">
-                {renderStars(review.rating)}
-              </div>
+      {/* Reviews Summary */}
+  <div className="flex items-center justify-between mb-2">
+  <div className="flex items-center gap-4 mt-[10px]">
+    <span className="text-gray-900 font-medium text-base">
+      Reviews ({userProfile.totalReviews})
+    </span>
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-0.5">
+        {renderStars(Math.floor(userProfile.averageRating))}
+      </div>
+      <span className="text-[12px] font-normal text-gray-700">
+        {userProfile.averageRating.toFixed(1)}
+      </span>
+    </div>
+  </div>
 
-              {/* Date */}
-              <div className="text-xs text-gray-500 mb-3">
-                {formatDate(review.createdAt)}
-              </div>
+  {/* View All Button */}
+  {reviews.length > 3 && (
+    <button
+      onClick={handleViewAll}
+      className="flex items-center gap-1 text-gray-900 text-sm font-medium hover:text-gray-700 transition-colors"
+    >
+      View all
+      <ChevronRight className="w-4 h-4" />
+    </button>
+  )}
+</div>
 
-              {/* User Info */}
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
-                  <span className="text-white text-[10px] font-semibold">
-                    {getUserInitials(review.user)}
-                  </span>
-                </div>
-                <span className="text-sm font-normal text-gray-900">
-                  {getUserDisplayName(review.user)}
-                </span>
-              </div>
+{/* Reviews Slideshow */}
+{reviews.length > 0 ? (
+  <div className="relative overflow-hidden group">
+    {/* Gradient overlays for smooth edges */}
+    <div className="absolute left-0 top-0 bottom-0 w-16  z-10 pointer-events-none" />
+    <div className="absolute right-0 top-0 bottom-0 w-16 z-10 pointer-events-none" />
+    
+    <div 
+      className="flex gap-4 animate-scroll hover:pause"
+      style={{
+        animation: 'scroll 30s linear infinite'
+      }}
+    >
+      {/* Duplicate reviews for seamless loop */}
+      {[...reviews, ...reviews].map((review: Review, index: number) => (
+        <div
+          key={`${review._id}-${index}`}
+          className="flex-shrink-0 w-[300px] bg-gray-50 rounded-lg p-4 hover:shadow-sm transition-shadow duration-200"
+        >
+          <div className='flex just'>
+          {/* Stars */}
+          <div className="flex items-center gap-0.5 mb-2">
+            {renderStars(review.rating)}
+          </div>
 
-              {/* Review Comment */}
-              <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
-                {review.comment}
-              </p>
+          {/* Date */}
+          <div className="text-xs text-gray-500 mb-3">
+            {formatDate(review.createdAt)}
+          </div>
+          </div>
+
+          {/* User Info */}
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
+              <span className="text-white text-[10px] font-semibold">
+                {getUserInitials(review.user)}
+              </span>
             </div>
-          ))}
+            <span className="text-sm font-normal text-gray-900">
+              {getUserDisplayName(review.user)}
+            </span>
+          </div>
+
+          {/* Review Comment */}
+          <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
+            {review.comment}
+          </p>
         </div>
+      ))}
+    </div>
+
+    <style jsx>{`
+      @keyframes scroll {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+      
+      .animate-scroll:hover {
+        animation-play-state: paused;
+      }
+    `}</style>
+  </div>
       ) : (
         <div className="text-center py-8">
           <div className="text-gray-500 text-lg mb-2">No reviews yet</div>
           <p className="text-gray-400 text-sm">Be the first to review this product</p>
         </div>
       )}
+      </div>
     </div>
   );
 };

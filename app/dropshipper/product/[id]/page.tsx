@@ -79,7 +79,7 @@ const mockProduct: Product = {
   ],
   vendor: {
     _id: 'vendor1',
-    businessName: 'New Sample Store',
+    businessName: 'Agnes David',
     location: 'Lagos, Nigeria'
   },
   category: {
@@ -98,7 +98,7 @@ const mockProduct: Product = {
   ],
   colours: ['black', 'white', 'blue'],
   status: 'Active',
-  shippingOptions: ['Door Delivery', 'Pickup Station'],
+  shippingOptions: [ 'Waybill'],
   deliveryTimelines: [
     { _id: '1', city: 'Lagos', period: '1-2 days' },
     { _id: '2', city: 'Abuja', period: '3-4 days' }
@@ -115,7 +115,7 @@ const mockSimilarProducts: Product[] = [
     name: 'Similar Product 1',
     price: 24999,
     rating: 4.2,
-    images: ['/health.png'],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor2', businessName: 'Fashion Hub', location: 'Abuja' },
     description: 'Similar product description 1'
   },
@@ -124,7 +124,7 @@ const mockSimilarProducts: Product[] = [
     name: 'Similar Product 2',
     price: 31999,
     rating: 4.7,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor3', businessName: 'Style Store', location: 'Port Harcourt' },
     description: 'Similar product description 2'
   },
@@ -133,7 +133,7 @@ const mockSimilarProducts: Product[] = [
     name: 'Similar Product 3',
     price: 18999,
     rating: 4.0,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor4', businessName: 'Trendy Shop', location: 'Ibadan' },
     description: 'Similar product description 3'
   },
@@ -142,7 +142,7 @@ const mockSimilarProducts: Product[] = [
     name: 'Similar Product 4',
     price: 42999,
     rating: 4.8,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor5', businessName: 'Premium Boutique', location: 'Lagos' },
     description: 'Similar product description 4'
   }
@@ -155,7 +155,7 @@ const mockSellerProducts: Product[] = [
     name: 'Similar Product 1',
     price: 24999,
     rating: 4.2,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor2', businessName: 'Fashion Hub', location: 'Abuja' },
     description: 'Similar product description 1'
   },
@@ -164,7 +164,7 @@ const mockSellerProducts: Product[] = [
     name: 'Similar Product 2',
     price: 31999,
     rating: 4.7,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor3', businessName: 'Style Store', location: 'Port Harcourt' },
     description: 'Similar product description 2'
   },
@@ -173,7 +173,7 @@ const mockSellerProducts: Product[] = [
     name: 'Similar Product 3',
     price: 18999,
     rating: 4.0,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor4', businessName: 'Trendy Shop', location: 'Ibadan' },
     description: 'Similar product description 3'
   },
@@ -182,7 +182,7 @@ const mockSellerProducts: Product[] = [
     name: 'Similar Product 4',
     price: 42999,
     rating: 4.8,
-    images: [''],
+    images: ['/gown.png'],
     vendor: { _id: 'vendor5', businessName: 'Premium Boutique', location: 'Lagos' },
     description: 'Similar product description 4'
   }
@@ -264,7 +264,7 @@ const Product = () => {
     return Array.from({ length: maxRating }, (_, index) => (
       <Star
         key={index}
-        className={`w-3 h-3 ${
+        className={`w-2.5 h-2.5 ${
           index < Math.floor(safeRating)
             ? 'fill-black text-black'
             : 'text-black'
@@ -771,7 +771,7 @@ const Product = () => {
           </div>
 
           {/* Product Details */}
-          <div className="px-4 py-3">
+          <div className="px-4 py-3 bg-gray-50">
             {/* Location and Promoted */}
             <div className="flex justify-between items-start">
               <div className="flex items-center text-gray-600">
@@ -817,7 +817,7 @@ const Product = () => {
             {/* Additional Information */}
             <div className="space-y-4 pt-2">
               {/* Bulk Pricing */}
-              {product.bulkPrices && product.bulkPrices.length > 0 && (
+              {/* {product.bulkPrices && product.bulkPrices.length > 0 && (
                 <div className="border-t border-gray-200 pt-4">
                   <h3 className="font-semibold text-gray-900 mb-3 text-base">Bulk price</h3>
                   <div className="grid grid-cols-2 gap-4">
@@ -829,10 +829,10 @@ const Product = () => {
                     ))}
                   </div>
                 </div>
-              )}      
+              )}       */}
               
               {/* Specifications */}
-              <div className="border-t border-gray-200 pt-4">
+              <div className=" bg-white p-4">
                 <div className="grid grid-cols-2 gap-x-8 gap-y-4">
                   {product.type && (
                     <div>
@@ -869,7 +869,7 @@ const Product = () => {
 
               {/* Delivery Information */}
               {product.deliveryTimelines && product.deliveryTimelines.length > 0 && 
-                <div className="border-t border-gray-200 pt-4">
+                <div className=" p-4 bg-white">
                   <h3 className="font-semibold text-gray-900 mb-3 text-base">Delivery</h3>
                   <div className="gap-10 flex w-[70%] justify-between">
                     {product.deliveryTimelines.map((delivery, index) => (
@@ -897,7 +897,7 @@ const Product = () => {
               }
 
               {/* Description */}
-              <div className="border-t border-gray-200 pt-4">
+              <div className=" p-4 bg-white">
                 <h2 className="text-lg font-semibold text-gray-900 mb-3">Description</h2>
                 <p className="text-gray-700 leading-relaxed text-sm">
                   {product.description || 'No description available'}
@@ -916,14 +916,14 @@ const Product = () => {
   // Render product card component
   const ProductCard = ({ product }: { product: Product }) => (
     <div
-      className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-200 cursor-pointer group"
+      className="bg-gray-50 rounded-lg overflow-hidden duration-200 cursor-pointer group"
       onClick={() => handleProductClick(product._id)}
     >
-      <div className="relative aspect-square bg-gray-100">
+      <div className="relative bg-gray-100">
         <img
           src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder-product.png'}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+          className="w-full h-26 object-cover group-hover:scale-105 rounded-lg transition-transform duration-200"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
             target.src = '/placeholder-product.png';
@@ -935,10 +935,10 @@ const Product = () => {
             e.stopPropagation();
             handleWishlistToggle(product._id, product.isWishlisted || false);
           }}
-          className="absolute top-3 right-3 p-2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
+          className="absolute top-26 right-0 p-2  bg-opacity-80 hover:bg-opacity-100 rounded-full transition-colors duration-200"
         >
           <Heart
-            className={`w-4 h-4 ${
+            className={`w-3 h-3 ${
               product.isWishlisted
                 ? 'fill-red-500 text-red-500'
                 : 'text-gray-600 hover:text-red-500'
@@ -947,28 +947,28 @@ const Product = () => {
         </button>
       </div>
 
-      <div className="p-4">
-        <div className="flex items-center gap-1 mb-2">
+      <div className="p-2">
+        <div className="flex items-center mb-1">
           {renderStars(product.rating)}
-          <span className="text-xs text-gray-500 ml-1">
+          {/* <span className="text-xs text-gray-500 ml-1">
             ({product.rating || 0})
-          </span>
+          </span> */}
         </div>
 
-        <h3 className="text-sm font-medium text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-[12px] text-gray-900 mb-1 line-clamp-2">
           {product.name}
         </h3>
 
-        <p className="text-xs text-gray-600 mb-2">
+        <p className="text-[12px] text-gray-600 mb-1">
           By {getVendorBusinessName(product.vendor)}
         </p>
 
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-1">
           <span className="text-lg font-bold text-gray-900">
             {formatPrice(product.price)}
           </span>
           {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-sm text-gray-500 line-through">
+            <span className="text-[12px] text-gray-500 line-through">
               {formatPrice(product.originalPrice)}
             </span>
           )}
@@ -977,36 +977,39 @@ const Product = () => {
         <p className="text-xs text-gray-500">
           {getVendorLocation(product.vendor)}
         </p>
+        <button className="mt-3 w-full px-3 py-1 bg-[#3652AD] text-white text-[12px] font-medium rounded-[100px] transition-colors">
+          Drop-ship item
+        </button>
       </div>
     </div>
   );
 
   // Error state
-  if (!loading && !product) {
-    return (
-      <div className='w-full '>
-        <div className="hidden md:block">
-          <Header />
-        </div>
-        <div className="w-[90%] mx-auto py-8">
-          <div className="text-center py-12">
-            <div className="text-red-600 text-lg mb-4">Error loading product</div>
-            <p className="text-gray-600">Product not found</p>
-            <button 
-              onClick={() => window.location.reload()}
-              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-        <Footer/>
-      </div>
-    );
-  }
+  // if (!loading && !product) {
+  //   return (
+  //     <div className='w-full '>
+  //       <div className="hidden md:block">
+  //         <Header />
+  //       </div>
+  //       <div className="w-[90%] mx-auto py-8">
+  //         <div className="text-center py-12">
+  //           <div className="text-red-600 text-lg mb-4">Error loading product</div>
+  //           <p className="text-gray-600">Product not found</p>
+  //           <button 
+  //             onClick={() => window.location.reload()}
+  //             className="mt-4 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+  //           >
+  //             Try Again
+  //           </button>
+  //         </div>
+  //       </div>
+  //       <Footer/>
+  //     </div>
+  //   );
+  // }
 
   return (
-    <div className='w-full'>
+    <div className='w-full bg-gray-50'>
       <div className="hidden md:block">
         <Header />
       </div>
@@ -1023,26 +1026,29 @@ const Product = () => {
         loading={loading}
       />
       {product && product.vendor && typeof product.vendor === 'object' && (
-  <div className="border-t border-gray-200 pt-4 pb-2">
-    <h2 className="text-lg font-semibold text-gray-900 mb-3">Seller Address</h2>
-    <div className="flex items-start">
-      <MapPin className="w-5 h-5 text-gray-600 mr-2 mt-0.5 flex-shrink-0" />
-      <div>
-        <p className="font-medium text-gray-900">{product.vendor.businessName}</p>
-        <p className="text-sm text-gray-600 mt-1">{product.vendor.location || 'Location not specified'}</p>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="bg-gray-50">
+          <div className="w-[90%] mx-auto bg-white rounded-lg p-4">
+          <h2 className="text-sm font-semibold text-gray-900 mb-3">Store Address</h2>
+          <div className="flex items-start">
+            <MapPin className="w-5 h-5 text-gray-600 mr-2 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className=" text-gray-900 text-[12px]">{product.vendor.businessName}</p>
+              <p className="text-sm text-gray-600 mt-1 text-[12px]">{product.vendor.location || 'Location not specified'}</p>
+            </div>
+          </div>
+          </div>
+        </div>
+      )}
       {/* Similar Items */}
-      <div className='w-[90%] mx-auto'>
-        <h2 className="text-2xl font-semibold mb-4 mt-10 text-black">Similar Items</h2>
+      <div className='w-full mx-auto bg-gray-50'>
+        <div className=" p-4">
+        <h2 className="text-xl font-semibold mb-4 text-black">Other items from seller</h2>
         
         {loading ? (
           renderProductsSkeleton()
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {similarProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
@@ -1055,29 +1061,32 @@ const Product = () => {
             )}
           </>
         )}
+        </div>
       </div>
 
       {/* Other Items from Seller */}
-      <div className='w-[90%] mx-auto mb-[30px]'>
-        <h2 className="text-2xl font-semibold mb-4 mt-10 text-black">Other Items from seller</h2>
+       <div className='w-full mx-auto bg-gray-50'>
+        <div className=" p-4">
+        <h2 className="text-xl font-semibold mb-4 text-black">Similar Items</h2>
         
         {loading ? (
           renderProductsSkeleton()
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {sellerProducts.map((product) => (
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {similarProducts.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}
             </div>
 
-            {sellerProducts.length === 0 && (
+            {similarProducts.length === 0 && (
               <div className="text-center py-8">
-                <div className="text-gray-500">No other products from this seller</div>
+                <div className="text-gray-500">No similar products found</div>
               </div>
             )}
           </>
         )}
+        </div>
       </div>
 
       {orderDetails && (

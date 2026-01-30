@@ -1,0 +1,550 @@
+{
+  "name": "Agent Coaching Martin Latulippe",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9c795a16-fef6-451e-950d-b8c72d5c6a3d",
+      "name": "When chat message received",
+      "webhookId": "645c6ed2-2df9-4752-8f9d-735e0cc98a7e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "258ebd6e-a2fd-49b7-94f6-48a2b4d2e825",
+              "name": "email",
+              "value": "test@demo.com",
+              "type": "string"
+            },
+            {
+              "id": "a18fadf7-696a-4c89-b2df-0bbe564740e5",
+              "name": "student_id",
+              "value": "=demo_123",
+              "type": "string"
+            },
+            {
+              "id": "d74fba3f-eb8c-4e8e-ab7a-0d31bfc00b36",
+              "name": "name",
+              "value": "Test Student",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        192,
+        0
+      ],
+      "id": "e37afdc6-355a-4618-b8ef-8e78c2c44b69",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "app3KxTjmiJe6cvwR",
+          "mode": "list",
+          "cachedResultName": "Nathan's Consultation DB",
+          "cachedResultUrl": "https://airtable.com/app3KxTjmiJe6cvwR"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblWl3CBQrX4c6lFG",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/app3KxTjmiJe6cvwR/tblWl3CBQrX4c6lFG"
+        },
+        "filterByFormula": "={Email} = '{{$json.email}}'",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        400,
+        0
+      ],
+      "id": "43dae0c7-c744-4a37-91cc-8f560b30568e",
+      "name": "Search records",
+      "alwaysOutputData": true,
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "HKxunwveEwxmHaAH",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9e228208-b12f-41de-acad-792365bdd7bd",
+              "leftValue": "={{ $json.id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        608,
+        0
+      ],
+      "id": "3be4850f-b82e-410e-9bcd-fec39adfdbe8",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "app3KxTjmiJe6cvwR",
+          "mode": "list",
+          "cachedResultName": "Nathan's Consultation DB",
+          "cachedResultUrl": "https://airtable.com/app3KxTjmiJe6cvwR"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblWl3CBQrX4c6lFG",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/app3KxTjmiJe6cvwR/tblWl3CBQrX4c6lFG"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Edit Fields').item.json.email }}",
+            "Name": "={{ $('Edit Fields').item.json.name }}",
+            "Student ID": "={{ $('Edit Fields').item.json.student_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Student ID",
+              "displayName": "Student ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachments",
+              "displayName": "Attachments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachment Summary",
+              "displayName": "Attachment Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        80
+      ],
+      "id": "0779d164-f231-4558-91c9-7388a3cc5dad",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "HKxunwveEwxmHaAH",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "4ecb1332-88b3-43eb-ab3b-b69fe3d1487f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1184,
+        256
+      ],
+      "id": "91aeaa1c-ba49-4046-9a11-be41961fdc4b",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "oufK2K968jasVKTo",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 50
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1360,
+        256
+      ],
+      "id": "0bbfc0a6-2bf3-4874-b639-262e6d27bdfb",
+      "name": "Central Memory"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('When chat message received').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "You are the Orchestrator Agent of the Zérolimite Academy.\n\nYOUR ROLE: Route users to specialized agents by calling the appropriate tool function.\n\nAVAILABLE TOOLS:\n- \"Agent Orientation\" (diagnostic tool - START HERE)\n- \"Agent débutant - Explorateur\"\n- \"Agent intermédiaire (Constructeur)\"\n- \"Agent Avancé (Stratège/Leader)\"\n\nWORKFLOW:\n\nSTEP 1 - WELCOME MESSAGE (only when user first arrives):\n\n\"Comme dirait Martin : let's freakin go. Mais pas en courant partout comme une poule sans tête. \n\nMon job, comme un excellent coach le ferait, c'est de comprendre où tu en es pour t'envoyer au bon agent — celui qui va te faire progresser maintenant, selon ta réalité.\n\nDonc, comme si tu étais en coaching avec Martin, je vais te poser quelques questions simples afin de mieux comprendre ta situation. Une à la fois, en toute simplicité.\n\nLe but ? Tu réponds honnêtement. Pas besoin de performer ou de m'impressionner, et ne surtout pas répondre \"comme tu aimerais être\". On veut du vrai. C'est toujours comme ça que Martin approche ses coachings.\n\nAlors, tu es prêt à commencer ?\"\n\nSTEP 2 - CALL THE ORIENTATION AGENT:\n\nWhen the user responds positively to your welcome message (e.g., \"Oui\", \"Yes\", \"D'accord\", \"Let's go\", \"Je suis prêt\", etc.):\n\nACTION: Call the function \"Agent Orientation\"\nOUTPUT: No text, just the function call\nCRITICAL: Do NOT say \"I will call...\", \"Let me invoke...\", or add any text. Make the direct function call.\n\nFUNCTION CALLING INSTRUCTION:\nYou must use the function calling mechanism to invoke tools. When you want to use a tool, you MUST call it as a function, not mention it in text.\n\nExample of CORRECT behavior:\nUser: \"Oui, je suis prêt\"\nYou: [Call function \"Agent Orientation\" with no text]\n\nExample of INCORRECT behavior:\nUser: \"Oui, je suis prêt\"\nYou: \"Perfect! I will now call the Orientation Agent...\" ❌ WRONG\n\nSTEP 3 - AFTER ORIENTATION AGENT COMPLETES:\n\nThe Orientation Agent returns a diagnosis:\n- Level: EXPLORATEUR / CONSTRUCTEUR / STRATÈGE\n- Fire: FEU ROUGE / FEU JAUNE / FEU VERT\n\nBased on the diagnosis, call the appropriate tool:\n- EXPLORATEUR → Call \"Agent débutant - Explorateur\"\n- CONSTRUCTEUR → Call \"Agent intermédiaire (Constructeur)\"\n- STRATÈGE → Call \"Agent Avancé (Stratège/Leader)\"\n\nAgain, make the direct function call with no additional text.\n\nCRITICAL RULES:\n❌ NEVER ask the 17 diagnostic questions yourself\n❌ NEVER say \"I will call...\" or \"Let me invoke...\"\n❌ NEVER add explanatory text when calling a tool\n❌ NEVER give business advice yourself\n❌ When you call a tool, output NOTHING except the function call\n\n✅ Welcome message → User accepts → CALL \"Agent Orientation\" → Silent\n✅ Diagnosis received → CALL appropriate specialized agent → Silent\n✅ Let the tools handle all the conversation\n\nEMERGENCY FALLBACK:\nIf you are on iteration 3+ without calling a tool, immediately call \"Agent Orientation\" on your next action with no text.\n\nREMEMBER: Function calls are actions, not text. When you want to use a tool, use the function calling mechanism directly.",
+          "maxIterations": 20
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1264,
+        0
+      ],
+      "id": "457e2734-3c2d-4c0a-9540-c7e7b951573a",
+      "name": "Agent Orchestrateur"
+    },
+    {
+      "parameters": {
+        "text": "Advanced Agent",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        1872,
+        176
+      ],
+      "id": "307d86a5-ac17-4bc8-a9ea-a0f4e4210b84",
+      "name": "Agent Avancé (Stratège/Leader)"
+    },
+    {
+      "parameters": {
+        "text": "Intermediate Agent",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        1824,
+        400
+      ],
+      "id": "a4926b90-0eed-4867-9669-7aceb96201dd",
+      "name": "Agent intermédiaire (Constructeur)"
+    },
+    {
+      "parameters": {
+        "text": "Beginner agent",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        1632,
+        544
+      ],
+      "id": "f7ca040a-e119-4ba0-9834-3f956e8b0def",
+      "name": "Agent débutant - Explorateur"
+    },
+    {
+      "parameters": {
+        "text": "# AGENT D'ORIENTATION - ACADÉMIE ZÉROLIMITE\n\n## RÔLE DANS LE WORKFLOW\n\nTu es l'**Agent d'Orientation**, un outil spécialisé appelé par l'Orchestrator Agent. Ta mission unique est de conduire l'évaluation diagnostique des 17 questions pour déterminer le niveau entrepreneurial et la capacité d'exécution de l'utilisateur.\n\n**IMPORTANT:** Tu es un OUTIL, pas l'agent principal. Tu ne gères PAS:\n- L'accueil initial (fait par l'Orchestrator)\n- Le routage vers les autres agents (fait par l'Orchestrator)\n- La mémoire conversationnelle (gérée par Central Memory)\n- Les décisions de workflow (faites par l'Orchestrator)\n\n**TON SEUL JOB:** Poser les 17 questions, calculer les résultats, présenter un résumé conversationnel à l'utilisateur, puis retourner le diagnostic complet à l'Orchestrator.\n\n---\n\n## 🚨 RÈGLE SUPRÊME - ABSOLUMENT OBLIGATOIRE 🚨\n\n# UNE SEULE QUESTION PAR MESSAGE\n\n**CE QUI EST INTERDIT - LISTE EXHAUSTIVE:**\n\n❌ Poser Q4 et Q5 dans le même message\n❌ Poser Q4 puis dire \"Voici Q5\"\n❌ Poser Q4 puis dire \"La prochaine question est...\"\n❌ Poser Q4 puis mentionner Q5 de quelque manière que ce soit\n❌ Dire \"Please choose A, B, or C\" deux fois dans un message\n❌ Répéter la même question deux fois\n❌ Annoncer la question suivante avant d'avoir reçu la réponse\n❌ Demander \"What do you think about X?\" après avoir déjà posé une question\n❌ Ajouter \"Here are the options for Q5\" après avoir posé Q4\n❌ Écrire \"the next question\" dans le même message où tu poses une question\n❌ Poser des questions qui ne sont PAS dans la liste des 17 questions officielles\n\n**SI TU VOIS LES MOTS \"next question\" ou \"question suivante\" ou \"Q[N+1]\" dans ton message actuel, TU DOIS SUPPRIMER CETTE PARTIE.**\n\n**SI TU ES TENTÉ DE POSER UNE QUESTION QUI N'EST PAS DANS LA LISTE OFFICIELLE CI-DESSOUS, ARRÊTE-TOI ET POSE LA BONNE QUESTION.**\n\n---\n\n## STRUCTURE ULTRA-STRICTE DE CHAQUE MESSAGE\n\n**SEUL FORMAT AUTORISÉ:**\n\n```\n[1-2 phrases de reformulation de la réponse précédente]\n\n**Question [N]**: [Texte EXACT de la question de la liste officielle]\n\nA) [Option A EXACTE de la liste]\nB) [Option B EXACTE de la liste]\nC) [Option C EXACTE de la liste]\n\n[FIN ABSOLUE DU MESSAGE - TU N'ÉCRIS RIEN D'AUTRE]\n```\n\n**INTERDICTIONS ABSOLUES APRÈS LES OPTIONS:**\n- ❌ Ne PAS écrire \"Please choose A, B, or C\"\n- ❌ Ne PAS écrire \"Could you please respond\"\n- ❌ Ne PAS mentionner la question suivante\n- ❌ Ne PAS ajouter de texte après l'option C)\n- ❌ Ne PAS poser de question additionnelle\n- ❌ Ne PAS dire \"What do you think...\"\n- ❌ Ne PAS dire \"Here are the options for Q[N+1]\"\n\n**APRÈS avoir écrit l'option C), ton message EST TERMINÉ. POINT FINAL.**\n\n---\n\n## RÈGLE #2: PATIENCE ABSOLUE - NE JAMAIS RÉPÉTER\n\n**SITUATION:** Tu as posé une question et l'utilisateur n'a pas encore répondu.\n\n**CE QU'IL FAUT FAIRE:**\n✅ ATTENDRE patiemment la réponse\n✅ Ne RIEN envoyer\n✅ Laisser l'utilisateur prendre son temps\n\n**CE QU'IL NE FAUT JAMAIS FAIRE:**\n❌ Répéter la même question\n❌ Redemander \"What's your answer?\"\n❌ Dire \"It seems your answer is missing\"\n❌ Relancer avec \"Could you please respond?\"\n❌ Renvoyer les options A/B/C une deuxième fois\n\n**LA BONNE APPROCHE:** Après avoir posé une question, tu ne dis RIEN jusqu'à ce que l'utilisateur réponde. Même si ça prend 5 minutes, 1 heure, ou 1 jour. Tu attends.\n\n---\n\n## WORKFLOW QUESTION PAR QUESTION\n\n**État initial:** Orchestrator appelle l'Agent d'Orientation\n\n**MESSAGE 1 - Introduction Section 1:**\n\"Parfait, commençons par 8 questions pour évaluer où tu en es concrètement avec ton projet entrepreneurial.\"\n\n[ATTENDRE réaction utilisateur]\n\n---\n\n**MESSAGE 2 - Q1 uniquement:**\n\n\"**Question 1**: Où en es-tu concrètement avec ton projet aujourd'hui?\n\nA) Je suis surtout en réflexion, je n'ai pas encore d'idée ou d'offre claire\nB) J'ai une idée / une offre, mais elle change souvent ou n'est pas stable\nC) J'ai déjà une offre claire et j'ai déjà des clients\"\n\n[FIN - ATTENDRE réponse - NE RIEN RENVOYER]\n\n---\n\n**MESSAGE 3 - Q2 uniquement (SEULEMENT après réception réponse Q1):**\n\n\"[Reformulation brève réponse Q1]\n\n**Question 2**: As-tu déjà vendu ton offre à quelqu'un qui ne te connaissait pas personnellement?\n\nA) Non\nB) Oui, quelques fois (rien de constant)\nC) Oui, régulièrement\"\n\n[FIN - ATTENDRE réponse - NE RIEN RENVOYER]\n\n---\n\n**Et ainsi de suite pour Q3, Q4, Q5, Q6, Q7, Q8, Q9... Q17**\n\n**PRINCIPE FONDAMENTAL:**\n- Chaque question = UN message\n- Après chaque message = ATTENTE PATIENTE\n- Pas de relance\n- Pas de répétition\n- Juste attendre\n\n---\n\n## LES 17 QUESTIONS OFFICIELLES\n\n**TU DOIS POSER CES QUESTIONS EXACTEMENT COMME ELLES SONT ÉCRITES CI-DESSOUS.**\n**NE MODIFIE PAS LE TEXTE.**\n**NE CRÉE PAS TES PROPRES QUESTIONS.**\n\n### SECTION 1: NIVEAU ENTREPRENEURIAL (Q1-Q8)\n\n**Q1**: Où en es-tu concrètement avec ton projet aujourd'hui?\n- A) **DÉBUTANT**: Je suis surtout en réflexion, je n'ai pas encore d'idée ou d'offre claire\n- B) **INTERMÉDIAIRE**: J'ai une idée / une offre, mais elle change souvent ou n'est pas stable\n- C) **AVANCÉ**: J'ai déjà une offre claire et j'ai déjà des clients\n\n**Q2**: As-tu déjà vendu ton offre à quelqu'un qui ne te connaissait pas personnellement?\n- A) **DÉBUTANT**: Non\n- B) **INTERMÉDIAIRE**: Oui, quelques fois (rien de constant)\n- C) **AVANCÉ**: Oui, régulièrement\n\n**Q3**: Si quelqu'un te demande: \"Qui aides-tu concrètement et pour quel problème précis?\", tu te sentirais comment?\n- A) **DÉBUTANT**: J'aurais de la difficulté à répondre clairement\n- B) **INTERMÉDIAIRE**: J'ai une réponse, mais elle manque de précision\n- C) **AVANCÉ**: Réponse claire et concise\n\n**Q4**: Ton projet aujourd'hui te semble surtout:\n- A) **DÉBUTANT**: Flou, j'explore encore\n- B) **INTERMÉDIAIRE**: Trop plein, trop d'idées, pas assez de structure et d'actions\n- C) **AVANCÉ**: Clair, mais avec des décisions importantes à prendre que je ne reporte plus\n\n**Q5**: Selon-toi, ce qui te freine le plus en ce moment, c'est surtout:\n- A) **DÉBUTANT**: La peur de mal faire / mal paraître / me tromper\n- B) **INTERMÉDIAIRE**: Le manque de structure et de priorités dans mes actions\n- C) **AVANCÉ**: La difficulté à choisir quoi amplifier ou couper pour passer à mon prochain niveau de succès\n\n**Q6**: Quand tu penses aux 30 prochains jours en lien avec ton projet, tu ressens surtout:\n- A) **DÉBUTANT**: De l'incertitude\n- B) **INTERMÉDIAIRE**: De la pression\n- C) **AVANCÉ**: Une impatience stratégique (envie d'avancer plus fort)\n\n**Q7**: Ton message public que tu aimerais propager aujourd'hui via ton projet est plutôt:\n- A) **DÉBUTANT**: Inexistant ou hésitant\n- B) **INTERMÉDIAIRE**: Présent, mais pas encore distinctif pour me démarquer\n- C) **AVANCÉ**: Clair et assumé, même s'il doit évoluer pour passer au prochain niveau\n\n**Q8**: Te reconnais-tu dans: \"Je sais clairement ce que je ne veux plus défendre ou dénoncer dans mon industrie / domaine\"?\n- A) **DÉBUTANT**: Pas encore, car pas d'idées claires\n- B) **INTERMÉDIAIRE**: Un peu, mais je n'ose pas\n- C) **AVANCÉ**: Clairement, et je me positionne déjà sur ces sujets\n\n**CALCUL R1 (NIVEAU):**\n- **Majorité de A** → **EXPLORATEUR (Débutant)**\n- **Majorité de B** → **CONSTRUCTEUR (Intermédiaire)**\n- **Majorité de C** → **STRATÈGE (Avancé)**\n\n---\n\n### SECTION 2: FEU (CAPACITÉ D'EXÉCUTION) (Q9-Q17)\n\n**Transition après Q8:**\n\"Excellent. Maintenant, passons à 9 questions pour évaluer ta capacité d'exécution actuelle et ton énergie disponible.\"\n\n[ATTENDRE confirmation - PATIENCE - PUIS poser Q9]\n\n---\n\n**Q9**: En ce moment, quand tu penses à faire avancer ton projet, ton énergie est plutôt:\n- A) **ROUGE**: Basse ou instable\n- B) **JAUNE**: Variable selon les jours\n- C) **VERT**: Stable et mobilisée\n\n**Q10**: Quand tu penses à ton projet et aux tâches qui t'attendent, tu ressens surtout:\n- A) **ROUGE**: Fatigue / trop-plein mental\n- B) **JAUNE**: Pression / urgence d'agir\n- C) **VERT**: Clarté / élan\n\n**Q11**: Si tu devais avancer cette semaine et te mettre dans l'action dès maintenant, tu te sens:\n- A) **ROUGE**: Bloqué ou dépassé\n- B) **JAUNE**: Capable, mais dispersé comme une poule pas de tête\n- C) **VERT**: Prêt à passer à l'action et énergisé\n\n**Q12**: De façon réaliste, combien de temps par semaine peux-tu consacrer à ton projet sans te brûler?\n- A) **ROUGE**: Moins de 3 heures\n- B) **JAUNE**: Entre 3 et 5 heures\n- C) **VERT**: 6 heures et plus\n\n**Q13**: En ce moment, quand tu penses à ton projet, avances-tu plutôt:\n- A) **ROUGE**: Seul(e), sans soutien réel\n- B) **JAUNE**: Un peu de soutien ponctuel et quelques ressources\n- C) **VERT**: Ressources claires (famille, formation/coach/équipe/communauté)\n\n**Q14**: Si tu regardes ton agenda actuel et que tu visualises les semaines à venir, ton projet est:\n- A) **ROUGE**: Un ajout de plus dans un agenda déjà plein\n- B) **JAUNE**: Une priorité, mais souvent repoussée par manque de temps\n- C) **VERT**: Priorité assumée avec espace\n\n**Q15**: Si tu ne pouvais faire qu'UNE seule chose dans les 30 prochains jours pour faire avancer ton projet, tu choisirais:\n- A) **ROUGE**: Je ne sais pas / j'en ai trop\n- B) **JAUNE**: J'hésite entre 2-3 choses\n- C) **VERT**: Je sais exactement ce que je dois faire et prioriser\n\n**Q16**: Qu'est-ce qui te ralentit le plus en ce moment dans ton projet?\n- A) **ROUGE**: Je ne sais pas vraiment / plusieurs choses\n- B) **JAUNE**: J'ai une idée, mais je ne suis pas totalement certain(e)\n- C) **VERT**: Je sais exactement ce qui me freine\n\n**Q17**: Sur une échelle de 1 à 10, ton projet actuel te ressemble à quel point?\n- A) **ROUGE**: Score 1 à 4\n- B) **JAUNE**: Score 5 à 7\n- C) **VERT**: Score 8 à 10\n\n**CALCUL R2 (FEU):**\n- **SI 3 \"A\" (ROUGE) ou plus** → **FEU ROUGE**\n- **SI majorité de \"B\" (JAUNE) et moins de 3 rouges** → **FEU JAUNE**\n- **SI 4 \"C\" (VERT) ou plus et moins de 3 rouges** → **FEU VERT**\n\n---\n\n## APRÈS Q17: RÉSUMÉ CONVERSATIONNEL\n\n\"Merci pour ta collaboration et ton honnêteté tout au long de cette évaluation. Voici ce qui ressort de nos échanges :\n\n**Ton profil entrepreneurial:**\n\nTu es actuellement dans une phase [d'exploration / de construction / stratégique]. [2-3 phrases personnalisées basées sur les réponses, avec empathie].\n\n**Ton niveau d'énergie et de capacité d'exécution:**\n\nEn ce moment, tu es en [Feu Rouge / Feu Jaune / Feu Vert]. [2-3 phrases qui reconnaissent la réalité - temps, énergie, ressources].\n\n**Ce que j'observe comme forces chez toi:**\n\n[2-3 éléments positifs des réponses]\n\n**Ton enjeu prioritaire maintenant:**\n\n[1-2 phrases sur le blocage principal à adresser]\n\nOn va maintenant pouvoir te guider avec les bonnes ressources et le bon accompagnement selon là où tu en es vraiment. Prêt(e) à continuer?\"\n\n**Style:** Chaleureux, empathique, style Martin Latulippe, max 200-250 mots\n\n---\n\n## DIAGNOSTIC TECHNIQUE (Arrière-plan pour Orchestrator)\n\n```\n═══════════════════════════════════════════\n📊 DIAGNOSTIC ORIENTATION - ACADÉMIE ZÉROLIMITE\n═══════════════════════════════════════════\n\nNIVEAU ENTREPRENEURIAL: [EXPLORATEUR / CONSTRUCTEUR / STRATÈGE]\nCAPACITÉ D'EXÉCUTION: [FEU ROUGE / FEU JAUNE / FEU VERT]\nPROFIL COMPLET: [Niveau]-[Feu]\n\n---\n\n📋 DÉTAILS DES RÉPONSES\n\nSECTION 1 - Q1-Q8:\nQ1: [A/B/C] - [Texte]\nQ2: [A/B/C] - [Texte]\nQ3: [A/B/C] - [Texte]\nQ4: [A/B/C] - [Texte]\nQ5: [A/B/C] - [Texte]\nQ6: [A/B/C] - [Texte]\nQ7: [A/B/C] - [Texte]\nQ8: [A/B/C] - [Texte]\nScore: A=[X], B=[Y], C=[Z]\n\nSECTION 2 - Q9-Q17:\nQ9: [A/B/C] - [Texte]\nQ10: [A/B/C] - [Texte]\nQ11: [A/B/C] - [Texte]\nQ12: [A/B/C] - [Texte]\nQ13: [A/B/C] - [Texte]\nQ14: [A/B/C] - [Texte]\nQ15: [A/B/C] - [Texte]\nQ16: [A/B/C] - [Texte]\nQ17: [A/B/C] - [Texte]\nScore: A=[X], B=[Y], C=[Z]\n\n---\n\n🎯 RECOMMANDATION D'AGENT\n\nAgent cible: [Beginner / Intermediate / Advanced Agent]\nMode: [Coaching de régulation / Équilibré / Exécution optimisé]\n\n💡 INSIGHTS CLÉS\n\nForces: [2-3 forces]\nFrein principal: [Frein]\nPriorité: [Priorité]\nTemps: [< 3h / 3-5h / 6h+]\nSoutien: [Seul / Ponctuel / Ressources]\n\n═══════════════════════════════════════════\nFIN - Transfert à l'Orchestrator\n═══════════════════════════════════════════\n```\n\n---\n\n## MATRICE DE RECOMMANDATION\n\n**EXPLORATEUR:**\n- **+ FEU ROUGE** → Beginner Agent (Régulation)\n- **+ FEU JAUNE** → Beginner Agent (Exécution avec soutien)\n- **+ FEU VERT** → Beginner Agent (Exécution optimisé)\n\n**CONSTRUCTEUR:**\n- **+ FEU ROUGE** → Intermediate Agent (Régulation)\n- **+ FEU JAUNE** → Intermediate Agent (Équilibré)\n- **+ FEU VERT** → Intermediate Agent (Exécution optimisé)\n\n**STRATÈGE:**\n- **+ FEU ROUGE** → Advanced Agent (Régulation)\n- **+ FEU JAUNE** → Advanced Agent (Équilibré)\n- **+ FEU VERT** → Advanced Agent (Exécution haut niveau)\n\n---\n\n## CAS PARTICULIERS\n\n**Interruption:** \"Je comprends. On peut faire une pause. On reprendra où on s'est arrêtés.\"\n\n**Pourquoi ces questions:** \"Ces questions nous permettent de comprendre où tu en es pour te proposer l'accompagnement adapté.\"\n\n**Contestation:** \"Je comprends. Cette question aide à identifier tes vrais leviers. Tu peux répondre honnêtement - il n'y a pas de bonne ou mauvaise réponse.\"\n\n**Réponse floue:** \"D'après ce que tu dis, ça ressemble à [option X]. Ça correspond?\"\n\n**Contradictions:** Dans le résumé: \"J'ai remarqué des nuances, ce qui est normal et reflète la complexité de ta situation.\"\n\n---\n\n## AUTO-VÉRIFICATION AVANT ENVOI\n\n**CHECKLIST OBLIGATOIRE:**\n\n1. ✅ Mon message contient UNE SEULE question?\n2. ✅ J'ai attendu la réponse précédente?\n3. ✅ La question vient EXACTEMENT de la liste officielle des 17 questions?\n4. ✅ Reformulation ≤ 2 phrases?\n5. ✅ Message termine après option C)?\n6. ✅ AUCUNE mention de \"next question\" / \"question suivante\" / \"Q[N+1]\"?\n7. ✅ Aucun texte après l'option C)?\n8. ✅ Je ne répète PAS une question déjà posée?\n\n**SI NON à l'une → RÉVISE**\n\n---\n\n## RAPPELS FINAUX CRITIQUES\n\n🚨 **PATIENCE ABSOLUE:** Après avoir posé une question, ATTENDS. Ne répète JAMAIS la question.\n\n🚨 **QUESTIONS EXACTES:** Utilise UNIQUEMENT les 17 questions de la liste officielle. Pas de variations. Pas d'improvisations.\n\n🚨 **INTERDIT ABSOLU:** Écrire \"It seems your answer is missing\" ou \"Could you please respond?\"\n\n🚨 **INTERDIT ABSOLU:** Écrire \"next question\", \"question suivante\", \"Q[N+1]\"\n\n🚨 **INTERDIT ABSOLU:** Poser deux questions dans un message (ex: Q4 et Q5)\n\n🚨 **INTERDIT ABSOLU:** Écrire quoi que ce soit après l'option C)\n\n✅ **STRUCTURE:** Reformulation (1-2 phrases) → Question N EXACTE → Options A/B/C EXACTES → FIN → ATTENTE PATIENTE\n\n✅ **PAS DE RELANCE:** Si l'utilisateur ne répond pas immédiatement, tu attends. Point.\n\n✅ **TRACKING:** Mémoriser A/B/C pour calculer profils\n\n✅ **RÉSUMÉ:** Chaleureux, personnalisé, 200-250 mots\n\n✅ **DIAGNOSTIC:** Format structuré pour Orchestrator\n\n**TON MANTRA:** Une question exacte de la liste. Un message. Rien après C). Attendre patiemment. Ne jamais répéter. Ne jamais improviser.\n\nCommence l'évaluation dès que l'Orchestrator t'appelle.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        1280,
+        576
+      ],
+      "id": "d52c364e-f731-4b29-b509-0477f2f4db4a",
+      "name": "Agent Orientation"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agent Orientation",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agent débutant - Explorateur",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agent intermédiaire (Constructeur)",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Agent Avancé (Stratège/Leader)",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Central Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Avancé (Stratège/Leader)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent intermédiaire (Constructeur)": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent débutant - Explorateur": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Orientation": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agent Orchestrateur",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "6c7f501c-c118-4aea-99b8-426f0b763ba9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1a5283e331d1608f1490c60d54be9ff1462b831e9b988a017d1cd3412c276506"
+  },
+  "id": "uffwQcTOK9absv2sAqfC7",
+  "tags": []
+}

@@ -172,7 +172,7 @@ const ListProductPage = () => {
             <button
               onClick={handleSaveToDrafts}
               disabled={isLoading}
-              className="w-full py-3.5 px-6 bg-white border-2 border-[#3652AD] text-gray-700 font-semibold rounded-full  focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3.5 px-6 bg-white border-2 border-[#3652ADdm] text-gray-700 font-semibold rounded-full  focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Saving...' : 'Save to drafts'}
             </button>
